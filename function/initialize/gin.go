@@ -24,12 +24,12 @@ func GinInit() {
 	{
 		pu.GET("/getUser", userApi.GetUser)
 		pu.POST("/register", userApi.Register)
-		pr.POST("/login", userApi.Login)
+		pu.POST("/login", userApi.Login)
 		pu.GET("/getPost", postApi.GetPost)
 		pu.GET("/getPostList", postApi.GetPostList)
 		pu.GET("/getComList", commentApi.GetCommentList)
-		pr.PUT("/upPost", postApi.UpdatePost)     // 本人
-		pr.DELETE("/delPost", postApi.DeletePost) // 作者本人
+		pu.PUT("/upPost", postApi.UpdatePost)     // 本人
+		pu.DELETE("/delPost", postApi.DeletePost) // 作者本人
 	}
 	{
 		pr.POST("/createPost", postApi.CreatePost)      // 已認證 用戶

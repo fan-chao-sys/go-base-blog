@@ -13,7 +13,7 @@ import (
 )
 
 // GenerateToken 生成 JWT token，返回字符串
-func GenerateToken(userID int) (string, error) {
+func GenerateToken(userID uint) (string, error) {
 	secret := []byte(os.Getenv("JWT_SECRET"))
 	if len(secret) == 0 {
 		secret = []byte("your_secret_key")

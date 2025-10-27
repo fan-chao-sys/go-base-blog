@@ -9,8 +9,8 @@ import (
 type UserApi struct{}
 
 func (api *UserApi) Login(c *gin.Context) {
-	var username = c.Param("username")
-	var password = c.Param("password")
+	var username = c.Query("username")
+	var password = c.Query("password")
 	userService.Login(username, password, c)
 }
 

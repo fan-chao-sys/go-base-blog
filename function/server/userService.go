@@ -1,9 +1,9 @@
 package server
 
 import (
-	"go-base-blog/function/model"
-
 	"github.com/gin-gonic/gin"
+	"go-base-blog/function/middleware"
+	"go-base-blog/function/model"
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
 )
@@ -35,11 +35,15 @@ func (us *UserService) Register(userName string, password string, email string, 
 // Login 登录
 func (us *UserService) Login(username string, password string, c *gin.Context) {
 	u := us.GetUserName(username)
-	if u.Password != password {
+	err := bcrypt.CompareHashAndPassword([]byte(u.Password), []byte(password))
+	if err != nil {
 		lgService.Sync(fail, "登录失败", username)
 		model.FailWithMessage("登录失败", c)
 		return
 	}
+
+	// 生成token
+	middleware.GenerateToken(u.ID)
 	model.Ok(c)
 }
 
@@ -60,7 +64,7 @@ func (us *UserService) GetUser(uid string, c *gin.Context) {
 
 func (us *UserService) GetUserName(username string) *model.User {
 	var user model.User
-	err := us.db.Where("UserName = ?", username).Find(&user).Error
+	err := us.db.Debug().Where("user_name = ?", username).Find(&user).Error
 	if err != nil {
 		lgService.Sync(fail, err.Error(), username)
 	}
