@@ -9,7 +9,10 @@ type CommentApi struct{}
 
 func (cm *CommentApi) CreateComment(c *gin.Context) {
 	var comment model.Comment
-	c.ShouldBindJSON(&comment)
+	if err := c.ShouldBindJSON(&comment); err != nil {
+		model.FailWithMessage("JSON绑定失败: "+err.Error(), c)
+		return
+	}
 	comService.CreateComment(comment, c)
 }
 

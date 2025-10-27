@@ -25,7 +25,7 @@ func (us *UserService) Register(userName string, password string, email string, 
 	user.Password = string(hashPassWord)
 	err = us.db.Create(&user).Error
 	if err != nil {
-		lgService.Sync(success, err.Error(), userName)
+		lgService.Sync(fail, err.Error(), userName)
 		model.FailWithMessage("注册失败", c)
 		return
 	}

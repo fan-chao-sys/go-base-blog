@@ -38,13 +38,14 @@ func (p *PostService) GetPostList(c *gin.Context) {
 }
 
 func (p *PostService) CreatePost(post model.Post, c *gin.Context) {
-	err := p.db.Create(post).Error
+	err := p.db.Create(&post).Error
 	if err != nil {
 		lgService.Sync(fail, err.Error(), strconv.Itoa(int(post.UserId)))
-		model.FailWithMessage("创建文章失败", c)
+		model.FailWithMessage("创建文章失败: "+err.Error(), c)
 		return
 	}
-	model.OkWithData(&post, c)
+	lgService.Sync(success, "创建文章成功", strconv.Itoa(int(post.UserId)))
+	model.Ok(c)
 }
 
 func (p *PostService) UpdatePost(post model.Post, c *gin.Context) {

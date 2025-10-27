@@ -6,11 +6,11 @@ import (
 
 type Comment struct {
 	gorm.Model
-	Content string `gorm:"column:content;type:text"`
-	PostId  uint   `gorm:"column:post_id;not null"`
-	Post    Post   `gorm:"foreignKey:PostId"`
-	UserId  uint   `gorm:"column:user_id;not null"`
-	User    User   `gorm:"foreignKey:UserId"`
+	Content string `json:"content" binding:"required,min=1" gorm:"column:content;type:text"`
+	PostId  uint   `json:"postid" binding:"required" gorm:"column:post_id;not null"`
+	Post    Post   `json:"post,omitempty" gorm:"foreignKey:PostId" binding:"-"`
+	UserId  uint   `json:"userid" binding:"required" gorm:"column:user_id;not null"`
+	User    User   `json:"user,omitempty" gorm:"foreignKey:UserId" binding:"-"`
 }
 
 func (Comment) TableName() string {

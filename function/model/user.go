@@ -6,8 +6,8 @@ import (
 
 type User struct {
 	gorm.Model
-	UserName string `json:"username" binding:"required,min=3,max=20" gorm:"column:user_name;type:varchar(20);unique;not null"`
-	Password string `json:"password" binding:"required,min=6" gorm:"column:pass_word;type:varchar(255);not null"`
+	UserName string `json:"username" binding:"required,max=20" gorm:"column:user_name;type:varchar(20);unique;not null"`
+	Password string `json:"password" binding:"required,min=1" gorm:"column:pass_word;type:varchar(255);not null"`
 	Email    string `json:"email" binding:"required,email" gorm:"column:email;type:varchar(255);unique;not null"`
 }
 

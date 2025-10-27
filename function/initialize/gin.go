@@ -38,10 +38,10 @@ func GinInit() {
 
 	err := router.Run(":8080")
 	if err != nil {
-		utilsLog.FormatMessage("<<<<<<<<<<<<<<<<<<<<<<<<<< 項目啟動失败:端口 - %s\n <<<<<<<<<<<<<<<<<<<<<<<<<<", os.Getenv("PORT"))
+		utilsLog.LogError(utilsLog.FormatMessage("<<<<<<<<<<<<<<<<<<<<<<<<<< 項目啟動失败:端口 - %s, 错误: %v\n <<<<<<<<<<<<<<<<<<<<<<<<<<", os.Getenv("PORT"), err))
 		return
 	}
-	utilsLog.FormatMessage("<<<<<<<<<<<<<<<<<<<<<<<<<< 項目啟動:端口 - %s\n <<<<<<<<<<<<<<<<<<<<<<<<<<", os.Getenv("PORT"))
+	utilsLog.LogInfo(utilsLog.FormatMessage("<<<<<<<<<<<<<<<<<<<<<<<<<< 項目啟動成功:端口 - 8080\n <<<<<<<<<<<<<<<<<<<<<<<<<<"))
 }
 
 func GetGin() *gin.Engine {

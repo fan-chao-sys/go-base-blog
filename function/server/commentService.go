@@ -20,8 +20,9 @@ func (cm *CommentService) CreateComment(comment model.Comment, c *gin.Context) {
 	if err != nil {
 		lgService.Sync(fail, err.Error(), strconv.Itoa(int(comment.UserId)))
 		model.FailWithMessage("创建评论失败", c)
+		return
 	}
-	model.OkWithData(&comment, c)
+	model.Ok(c)
 }
 
 func (cm *CommentService) GetCommentList(postId string, c *gin.Context) {

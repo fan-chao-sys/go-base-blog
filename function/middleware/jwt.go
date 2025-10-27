@@ -1,15 +1,11 @@
 package middleware
 
 import (
-	"fmt"
 	"github.com/gin-gonic/gin"
 )
 
+// Jwt 返回 JWT 认证中间件
 func Jwt() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		fmt.Println("mw before")
-		JWTAuthMiddleware()
-		c.Next() // 调用下个中间件,如没有，及调用接口本身
-		fmt.Println("mw after")
-	}
+	// 直接返回 JWT 认证中间件函数
+	return JWTAuthMiddleware()
 }

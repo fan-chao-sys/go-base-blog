@@ -25,8 +25,11 @@ func GenerateToken(userID uint) (string, error) {
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 
-	utilsLog.FormatMessage("<<<<<<<<<< 新生成Token:", token)
-	return token.SignedString(secret)
+	signedToken, err := token.SignedString(secret)
+	if err == nil {
+		utilsLog.LogInfo(utilsLog.FormatMessage("<<<<<<<<<< 新生成Token:%s,  用户ID: %d", signedToken, userID))
+	}
+	return signedToken, err
 }
 
 // JWTAuthMiddleware 返回一个 Gin 中间件，校验 Authorization: Bearer <token>

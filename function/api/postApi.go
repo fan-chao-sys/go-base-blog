@@ -9,7 +9,10 @@ type PostApi struct{}
 
 func (p *PostApi) CreatePost(c *gin.Context) {
 	var post model.Post
-	c.ShouldBindJSON(&post)
+	if err := c.ShouldBindJSON(&post); err != nil {
+		model.FailWithMessage("JSON绑定失败: "+err.Error(), c)
+		return
+	}
 	postService.CreatePost(post, c)
 }
 
