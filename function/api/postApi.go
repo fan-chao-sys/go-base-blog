@@ -14,7 +14,7 @@ func (p *PostApi) CreatePost(c *gin.Context) {
 }
 
 func (p *PostApi) GetPost(c *gin.Context) {
-	pid := c.Param("pid")
+	pid := c.Query("pid")
 	postService.GetPost(pid, c)
 }
 
@@ -29,6 +29,6 @@ func (p *PostApi) UpdatePost(c *gin.Context) {
 }
 
 func (p *PostApi) DeletePost(c *gin.Context) {
-	pid := c.Param("pid")
+	pid := c.Query("pid")
 	postService.DeletePost(pid, c)
 }

@@ -12,7 +12,7 @@ type CommentService struct {
 }
 
 func NewCommentService(db *gorm.DB) *CommentService {
-	return &CommentService{}
+	return &CommentService{db: db}
 }
 
 func (cm *CommentService) CreateComment(comment model.Comment, c *gin.Context) {
@@ -26,7 +26,7 @@ func (cm *CommentService) CreateComment(comment model.Comment, c *gin.Context) {
 
 func (cm *CommentService) GetCommentList(postId string, c *gin.Context) {
 	var comments []model.Comment
-	err := cm.db.Where("post_id = ?", postId).Order("create_time desc").Find(&comments).Error
+	err := cm.db.Where("post_id = ?", postId).Order("created_at desc").Find(&comments).Error
 	if err != nil {
 		lgService.Sync(fail, err.Error(), "")
 		model.FailWithMessage("获取评论列表失败", c)

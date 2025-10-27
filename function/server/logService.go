@@ -9,8 +9,8 @@ type LogService struct {
 	db *gorm.DB
 }
 
-func NewLogService() *LogService {
-	return &LogService{}
+func NewLogService(db *gorm.DB) *LogService {
+	return &LogService{db: db}
 }
 
 func (l *LogService) Sync(errCode int, msg string, operate string) {

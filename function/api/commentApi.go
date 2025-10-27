@@ -14,6 +14,6 @@ func (cm *CommentApi) CreateComment(c *gin.Context) {
 }
 
 func (cm *CommentApi) GetCommentList(c *gin.Context) {
-	pid := c.Param("pid")
+	pid := c.Query("pid")
 	comService.GetCommentList(pid, c)
 }

@@ -52,6 +52,12 @@ func (us *UserService) GetUserId(uid uint) *model.User {
 	return &user
 }
 
+func (us *UserService) GetUser(uid string, c *gin.Context) {
+	var user model.User
+	us.db.Where("id = ?", uid).Find(&user)
+	model.OkWithData(user, c)
+}
+
 func (us *UserService) GetUserName(username string) *model.User {
 	var user model.User
 	err := us.db.Where("UserName = ?", username).Find(&user).Error

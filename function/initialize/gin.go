@@ -1,19 +1,19 @@
 package initialize
 
 import (
+	"github.com/gin-gonic/gin"
 	"go-base-blog/function/middleware"
 	utilsLog "go-base-blog/function/utils"
 	"os"
-
-	"github.com/gin-gonic/gin"
 )
 
 var router *gin.Engine
 
 func GinInit() {
-	router = gin.Default()
+	utilsLog.LogInfo("<<<<<<<<<<<<<<<<<<<<<<<<<< Gin 初始化 <<<<<<<<<<<<<<<<<<<<<<<<<<")
 
-	router.GET("/", func(c *gin.Context) {
+	router = gin.Default()
+	router.GET("/test", func(c *gin.Context) {
 		c.JSON(200, gin.H{
 			"message": "Welcome to Go Base Blog!",
 		})
@@ -22,19 +22,25 @@ func GinInit() {
 	pu := router.Group("/public")
 	pr := router.Group("/private").Use(middleware.Jwt())
 	{
-		pu.GET("/register", userApi.Register)
-		pr.GET("/login", userApi.Login)
+		pu.GET("/getUser", userApi.GetUser)
+		pu.POST("/register", userApi.Register)
+		pr.POST("/login", userApi.Login)
 		pu.GET("/getPost", postApi.GetPost)
-		pu.GET("/listCom", commentApi.GetCommentList)
-		pr.GET("/upPost", postApi.UpdatePost)  // 本人
-		pr.GET("/delPost", postApi.DeletePost) // 作者本人
+		pu.GET("/getPostList", postApi.GetPostList)
+		pu.GET("/getComList", commentApi.GetCommentList)
+		pr.PUT("/upPost", postApi.UpdatePost)     // 本人
+		pr.DELETE("/delPost", postApi.DeletePost) // 作者本人
 	}
 	{
-		pr.GET("/createPost", postApi.CreatePost)      // 已認證 用戶
-		pr.GET("/createCom", commentApi.CreateComment) // 已認證 用戶
+		pr.POST("/createPost", postApi.CreatePost)      // 已認證 用戶
+		pr.POST("/createCom", commentApi.CreateComment) // 已認證 用戶
 	}
 
-	router.Run(":" + os.Getenv("PORT"))
+	err := router.Run(":8080")
+	if err != nil {
+		utilsLog.FormatMessage("<<<<<<<<<<<<<<<<<<<<<<<<<< 項目啟動失败:端口 - %s\n <<<<<<<<<<<<<<<<<<<<<<<<<<", os.Getenv("PORT"))
+		return
+	}
 	utilsLog.FormatMessage("<<<<<<<<<<<<<<<<<<<<<<<<<< 項目啟動:端口 - %s\n <<<<<<<<<<<<<<<<<<<<<<<<<<", os.Getenv("PORT"))
 }
 
