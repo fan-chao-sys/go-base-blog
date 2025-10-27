@@ -2,15 +2,15 @@ package api
 
 import (
 	"github.com/gin-gonic/gin"
-	"go-base-blog/function/model"
+	model2 "go-base-blog/model"
 )
 
 type PostApi struct{}
 
 func (p *PostApi) CreatePost(c *gin.Context) {
-	var post model.Post
+	var post model2.Post
 	if err := c.ShouldBindJSON(&post); err != nil {
-		model.FailWithMessage("JSON绑定失败: "+err.Error(), c)
+		model2.FailWithMessage("JSON绑定失败: "+err.Error(), c)
 		return
 	}
 	postService.CreatePost(post, c)
@@ -26,7 +26,7 @@ func (p *PostApi) GetPostList(c *gin.Context) {
 }
 
 func (p *PostApi) UpdatePost(c *gin.Context) {
-	var post model.Post
+	var post model2.Post
 	c.ShouldBindJSON(&post)
 	postService.UpdatePost(post, c)
 }

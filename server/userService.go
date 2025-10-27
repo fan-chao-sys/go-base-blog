@@ -2,8 +2,8 @@ package server
 
 import (
 	"github.com/gin-gonic/gin"
-	"go-base-blog/function/middleware"
-	"go-base-blog/function/model"
+	"go-base-blog/middleware"
+	model2 "go-base-blog/model"
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
 )
@@ -18,7 +18,7 @@ func NewUserService(db *gorm.DB) *UserService {
 
 // Register 注册
 func (us *UserService) Register(userName string, password string, email string, c *gin.Context) {
-	user := model.NewUser(userName, password, email)
+	user := model2.NewUser(userName, password, email)
 
 	// 用户密码 - 单项哈希加密(不可逆)
 	hashPassWord, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
@@ -26,10 +26,10 @@ func (us *UserService) Register(userName string, password string, email string, 
 	err = us.db.Create(&user).Error
 	if err != nil {
 		lgService.Sync(fail, err.Error(), userName)
-		model.FailWithMessage("注册失败", c)
+		model2.FailWithMessage("注册失败", c)
 		return
 	}
-	model.OkWithData(user, c)
+	model2.OkWithData(user, c)
 }
 
 // Login 登录
@@ -38,17 +38,17 @@ func (us *UserService) Login(username string, password string, c *gin.Context) {
 	err := bcrypt.CompareHashAndPassword([]byte(u.Password), []byte(password))
 	if err != nil {
 		lgService.Sync(fail, "登录失败", username)
-		model.FailWithMessage("登录失败", c)
+		model2.FailWithMessage("登录失败", c)
 		return
 	}
 
 	// 生成token
 	middleware.GenerateToken(u.ID)
-	model.Ok(c)
+	model2.Ok(c)
 }
 
-func (us *UserService) GetUserId(uid uint) *model.User {
-	var user model.User
+func (us *UserService) GetUserId(uid uint) *model2.User {
+	var user model2.User
 	err := us.db.Where("uid = ?", uid).Find(&user).Error
 	if err != nil {
 		lgService.Sync(fail, err.Error(), user.UserName)
@@ -57,13 +57,13 @@ func (us *UserService) GetUserId(uid uint) *model.User {
 }
 
 func (us *UserService) GetUser(uid string, c *gin.Context) {
-	var user model.User
+	var user model2.User
 	us.db.Where("id = ?", uid).Find(&user)
-	model.OkWithData(user, c)
+	model2.OkWithData(user, c)
 }
 
-func (us *UserService) GetUserName(username string) *model.User {
-	var user model.User
+func (us *UserService) GetUserName(username string) *model2.User {
+	var user model2.User
 	err := us.db.Debug().Where("user_name = ?", username).Find(&user).Error
 	if err != nil {
 		lgService.Sync(fail, err.Error(), username)

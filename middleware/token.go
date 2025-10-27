@@ -1,8 +1,8 @@
 package middleware
 
 import (
-	"go-base-blog/function/model"
-	utilsLog "go-base-blog/function/utils"
+	"go-base-blog/model"
+	utilsLog "go-base-blog/utils"
 	"net/http"
 	"os"
 	"strings"

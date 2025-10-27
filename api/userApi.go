@@ -3,7 +3,7 @@ package api
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"go-base-blog/function/model"
+	"go-base-blog/model"
 )
 
 type UserApi struct{}

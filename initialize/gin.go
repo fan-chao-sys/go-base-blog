@@ -2,8 +2,8 @@ package initialize
 
 import (
 	"github.com/gin-gonic/gin"
-	"go-base-blog/function/middleware"
-	utilsLog "go-base-blog/function/utils"
+	"go-base-blog/middleware"
+	utilsLog "go-base-blog/utils"
 	"os"
 )
 
@@ -20,7 +20,7 @@ func GinInit() {
 	})
 
 	pu := router.Group("/public")
-	pr := router.Group("/private").Use(middleware.Jwt())
+	pr := router.Group("/private").Use(middleware.JWTAuthMiddleware())
 	{
 		pu.GET("/getUser", userApi.GetUser)
 		pu.POST("/register", userApi.Register)

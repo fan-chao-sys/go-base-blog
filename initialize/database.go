@@ -1,11 +1,10 @@
 package initialize
 
 import (
+	model2 "go-base-blog/model"
+	utilLog "go-base-blog/utils"
 	"os"
 	"path/filepath"
-
-	"go-base-blog/function/model"
-	utilLog "go-base-blog/function/utils"
 
 	toml "github.com/pelletier/go-toml/v2"
 	"gorm.io/driver/mysql"
@@ -80,7 +79,7 @@ func DBInit() error {
 	}
 
 	db = dataBase
-	err = dataBase.AutoMigrate(&model.User{}, &model.Post{}, &model.Comment{}, &model.Log{})
+	err = dataBase.AutoMigrate(&model2.User{}, &model2.Post{}, &model2.Comment{}, &model2.Log{})
 	if err != nil {
 
 		return err

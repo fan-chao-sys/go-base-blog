@@ -2,7 +2,7 @@ package server
 
 import (
 	"github.com/gin-gonic/gin"
-	"go-base-blog/function/model"
+	model2 "go-base-blog/model"
 	"gorm.io/gorm"
 	"strconv"
 )
@@ -16,54 +16,53 @@ func NewPostService(db *gorm.DB) *PostService {
 }
 
 func (p *PostService) GetPost(postId string, c *gin.Context) {
-	var post model.Post
+	var post model2.Post
 	err := p.db.Find(&post, postId).Error
 	if err != nil {
 		lgService.Sync(fail, err.Error(), strconv.Itoa(int(post.UserId)))
-		model.FailWithMessage("获取文章详情失败", c)
+		model2.FailWithMessage("获取文章详情失败", c)
 		return
 	}
-	model.OkWithData(post, c)
+	model2.OkWithData(post, c)
 }
 
 func (p *PostService) GetPostList(c *gin.Context) {
-	var posts []model.Post
+	var posts []model2.Post
 	err := p.db.Find(&posts).Error
 	if err != nil {
 		lgService.Sync(fail, err.Error(), "")
-		model.FailWithMessage("获取文章列表失败", c)
+		model2.FailWithMessage("获取文章列表失败", c)
 		return
 	}
-	model.OkWithData(posts, c)
+	model2.OkWithData(posts, c)
 }
 
-func (p *PostService) CreatePost(post model.Post, c *gin.Context) {
+func (p *PostService) CreatePost(post model2.Post, c *gin.Context) {
 	err := p.db.Create(&post).Error
 	if err != nil {
 		lgService.Sync(fail, err.Error(), strconv.Itoa(int(post.UserId)))
-		model.FailWithMessage("创建文章失败: "+err.Error(), c)
+		model2.FailWithMessage("创建文章失败: "+err.Error(), c)
 		return
 	}
-	lgService.Sync(success, "创建文章成功", strconv.Itoa(int(post.UserId)))
-	model.Ok(c)
+	model2.Ok(c)
 }
 
-func (p *PostService) UpdatePost(post model.Post, c *gin.Context) {
+func (p *PostService) UpdatePost(post model2.Post, c *gin.Context) {
 	err := p.db.UpdateColumns(&post).Error
 	if err != nil {
 		lgService.Sync(fail, err.Error(), strconv.Itoa(int(post.UserId)))
-		model.FailWithMessage("更新文章失败", c)
+		model2.FailWithMessage("更新文章失败", c)
 		return
 	}
-	model.OkWithData(success, c)
+	model2.OkWithData(success, c)
 }
 
 func (p *PostService) DeletePost(pid string, c *gin.Context) {
-	err := p.db.Delete(&model.Post{}, pid).Error
+	err := p.db.Debug().Unscoped().Delete(&model2.Post{}, pid).Error
 	if err != nil {
 		lgService.Sync(fail, err.Error(), "")
-		model.FailWithMessage("删除文章失败", c)
+		model2.FailWithMessage("删除文章失败", c)
 		return
 	}
-	model.OkWithData(success, c)
+	model2.OkWithData(success, c)
 }

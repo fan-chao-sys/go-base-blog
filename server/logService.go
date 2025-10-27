@@ -1,7 +1,7 @@
 package server
 
 import (
-	"go-base-blog/function/model"
+	"go-base-blog/model"
 	"gorm.io/gorm"
 )
 
