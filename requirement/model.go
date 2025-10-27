@@ -1,4 +1,4 @@
-package main
+package requirement
 
 // 代码示例1:
 // 参考:数据库连接与模型定义
