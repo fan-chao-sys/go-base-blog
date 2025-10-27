@@ -8,7 +8,7 @@ type Post struct {
 	Content string `gorm:"column:content;type:text;not null"`
 	Author  uint   `gorm:"column:author;not null"`
 	UserId  uint   `gorm:"column:user_id;not null;index"`
-	User    User   `gorm:"foreignkey:UserID"`
+	User    User   `gorm:"foreignKey:UserId"`
 }
 
 func (Post) TableName() string {
